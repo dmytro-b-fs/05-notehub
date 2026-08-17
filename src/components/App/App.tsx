@@ -7,16 +7,14 @@ import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import NoteList from "../NoteList/NoteList.tsx";
-import { getNotes, createNote } from "../../services/noteService.ts";
-import type { NoteFormData } from "../../types/note.ts";
-import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+import { getNotes } from "../../services/noteService.ts";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import Pagination from "../Pagination/Pagination";
 import debounce from "lodash.debounce";
 
 export default function App() {
   const perPage = 5;
-  const queryClient = useQueryClient();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState<string | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,11 +35,10 @@ export default function App() {
     }
   }, [notes, query]);
 
-  // Дебаунсований обработчик поиска
   const debouncedSetQuery = useMemo(
     () => debounce((searchQuery: string) => {
       setCurrentPage(1);
-      setQuery(searchQuery);
+      setQuery(searchQuery || undefined);
     }, 300),
     []
   );
@@ -56,22 +53,6 @@ export default function App() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  const createMutation = useMutation({
-    mutationFn: createNote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      closeModal();
-      toast.success("Note created");
-    },
-    onError: () => {
-      toast.error("Failed to create note");
-    },
-  });
-
-  const handleCreateNote = async (noteData: NoteFormData) => {
-    await createMutation.mutateAsync(noteData);
   };
 
 
@@ -98,9 +79,9 @@ export default function App() {
       {isError && <ErrorMessage />}
       {isSuccess && <NoteList notes={notes?.notes || []} />}
       
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <NoteForm onClose={closeModal} onSubmit={handleCreateNote} />
-      </Modal>
+      {isModalOpen && <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <NoteForm onClose={closeModal} />
+      </Modal>}
 
       <Toaster position="top-center" />
     </>

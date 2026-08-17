@@ -1,12 +1,13 @@
 import css from './NoteForm.module.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import type { NoteFormData } from '../../types/note.ts';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createNote } from '../../services/noteService';
+import { toast } from 'react-hot-toast';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 interface NoteFormProps {
   onClose: () => void;
-  onSubmit: (note: NoteFormData) => Promise<void>;
 }
 
 const validationSchema = Yup.object().shape({
@@ -21,7 +22,21 @@ const validationSchema = Yup.object().shape({
     .oneOf(['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'], 'Invalid tag'),
 });
 
-export default function NoteForm({ onSubmit, onClose }: NoteFormProps) {
+export default function NoteForm({ onClose }: NoteFormProps) {
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: createNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      toast.success('Note created');
+      onClose();
+    },
+    onError: () => {
+      toast.error('Failed to create note');
+    },
+  });
+
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -30,12 +45,8 @@ export default function NoteForm({ onSubmit, onClose }: NoteFormProps) {
     },
     validationSchema,
     onSubmit: async (values) => {
-      try {
-        await onSubmit(values);
-        formik.resetForm();
-      } catch (error) {
-        console.error('Failed to submit form:', error);
-      }
+      await createMutation.mutateAsync(values);
+      formik.resetForm();
     },
   });
 
@@ -91,8 +102,8 @@ export default function NoteForm({ onSubmit, onClose }: NoteFormProps) {
         <button type="button" className={css.cancelButton} onClick={onClose}>
           Cancel
         </button>
-        <button type="submit" className={css.submitButton}>
-          Create note
+        <button type="submit" className={css.submitButton} disabled={createMutation.isPending}>
+          {createMutation.isPending ? 'Creating...' : 'Create note'}
         </button>
       </div>
     </form>

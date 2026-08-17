@@ -10,11 +10,11 @@ export interface NotesResponse {
 
 
 
-export async function getNotes(queryString: string, page: number, perPage: number): Promise<NotesResponse> {
+export async function getNotes(search: string | undefined, page: number, perPage: number): Promise<NotesResponse> {
   const params: Record<string, string> = { page: `${page}`, perPage: `${perPage}` };
   
-  if (queryString !== "all") {
-    params.search = queryString;
+  if (search && search.trim()) {
+    params.search = search.trim();
   }
   
   const response = await axios.get<NotesResponse>("https://notehub-public.goit.study/api/notes", {

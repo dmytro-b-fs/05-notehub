@@ -9,7 +9,6 @@ const ReactPaginate = (
   ReactPaginateModule as unknown as ModuleWithDefault<ComponentType<ReactPaginateProps>>
 ).default;
 
-// Описуємо пропси
 interface PaginationProps {
   pageCount: number;
   forcePage: number;
