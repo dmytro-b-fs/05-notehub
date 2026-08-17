@@ -20,16 +20,8 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
 
 
   return (
-    <header className={styles.header}>
+    
       <div className={styles.container}>
-        <a
-          className={styles.link}
-          href="https://www.themoviedb.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by TMDB
-        </a>
         <form className={styles.form} action={formHandleSubmit}>
           <input
             className={styles.input}
@@ -44,6 +36,8 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
           </button>
         </form>
       </div>
-    </header>
+    
   );
 }
+
+
