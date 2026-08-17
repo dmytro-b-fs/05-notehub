@@ -2,7 +2,7 @@ import css from './Modal.module.css';
 // import { createPortal } from 'react-dom';
 import { useEffect } from 'react';
 import type { Note, NoteFormData } from '../../types/note.ts';
-import Form from '../Form/Form.tsx';
+import Form from '../NoteForm/NoteForm.tsx';
 import { createPortal } from 'react-dom';
 
 interface NotesModalProps {

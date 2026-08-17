@@ -1,4 +1,4 @@
-import css from './Form.module.css';
+import css from './NoteForm.module.css';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import type { Note, NoteFormData } from '../../types/note.ts';

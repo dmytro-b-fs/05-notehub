@@ -1,5 +1,5 @@
 import css from "./App.module.css";
-import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "../SearchBox/SearchBox.tsx";
 import { Toaster, toast } from "react-hot-toast";
 import Loader from "../Loader/Loader";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
