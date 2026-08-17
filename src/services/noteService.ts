@@ -1,11 +1,11 @@
 import axios from 'axios';
 import type { Note, NoteFormData } from '../types/note.ts';
 
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+const API_TOKEN = import.meta.env.VITE_NOTEHUB_TOKEN;
 
 export interface NotesResponse {
     notes: Note[];
-    total_pages: number;
+    totalPages: number;
 }
 
 
