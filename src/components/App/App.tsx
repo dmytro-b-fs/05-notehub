@@ -6,7 +6,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import { useState, useEffect } from "react";
 import NoteList from "../NoteList/NoteList.tsx";
 import MovieModal from "../Modal/Modal.tsx";
-import { getNotes, createNote, deleteNote } from "../../services/notesService.ts";
+import { getNotes, createNote, deleteNote } from "../../services/noteService.ts";
 import type { NoteFormData } from "../../types/note.ts";
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import Pagination from "../Pagination/Pagination";
